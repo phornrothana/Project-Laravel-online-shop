@@ -37,6 +37,10 @@
                   </tr> --}}
                 </tbody>
               </table>
+              <div class="show-page mt-3">
+
+              </div>
+              <button onclick="BrandRefresh()" class=" btn btn-outline-danger rounded-0 btn-sm">refresh</button>
             </div>
           </div>
         </div>
@@ -45,10 +49,14 @@
 @endsection
 @section('scripts')
   <script>
-    const BrandList = () => {
+    const BrandList = (page =1,search='') => {
     $.ajax({
         type: "POST",
         url: "{{ route('brand.list') }}",
+        data:{
+            'page' :page,
+            "search" : search
+        },
         dataType: "json",
         success: function (response) {
             if (response.status == 200) {
@@ -73,11 +81,66 @@
                     `;
                 });
                 $(".BrandList").html(tr);
+
+                //Pagination
+                let page = ``;
+                let totalPage = response.page.totalPage;
+                let currentPage = response.page.currentPage;
+                page = `
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li onclick="PreviousPage(${currentPage})" class="page-item ${(currentPage == 1) ? 'd-none' : 'd-block' }">
+                        <a class="page-link" href="javascript:void()" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        </li>`;
+
+                        for(let i=1;i<=totalPage;i++){
+                            page += `
+                                <li onclick="BrandPage(${i})" class="page-item ${(i == currentPage) ? 'active' : '' }">
+                                    <a class="page-link" href="javascript:void()">${i}</a>
+                                </li>`;
+                        }
+
+                        page +=`<li onclick="NextPage(${currentPage})" class="page-item ${( currentPage == totalPage ) ? 'd-none' : 'd-block'}">
+                        <a class="page-link" href="javascript:void()" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        </li>
+                    </ul>
+                </nav>
+                `;
+                 $(".show-page").html(page)
             }
         }
     });
 };
  BrandList()
+ const BrandRefresh = () => {
+        BrandList();
+        $("#search").val(" ");
+    }
+
+    $(document).on("click",'.btnSearch', function () {
+         let searchValue = $("#search").val();
+         BrandList(1,searchValue);
+
+         //close modal
+         $("#modalSearch").modal('hide');
+    });
+
+    const NextPage  = (page) => {
+        BrandList(page + 1);
+    }
+
+    //Previous Page
+    const PreviousPage = (page) => {
+        BrandList(page - 1);
+    }
+
+ const BrandPage = (page) => {
+    BrandList(page)
+ }
  const BrandDelete = (id) =>{
     if(confirm("Do you want to delete this ?"))
      {

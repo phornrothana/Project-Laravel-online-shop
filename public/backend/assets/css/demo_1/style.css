@@ -765,3 +765,13 @@
     bottom: 0;
     right: 0;
 }
+.searct_icon
+{
+    font-size: 30px;
+    cursor: pointer;
+}
+#btnSearch {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}

@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/css/demo_1/style.css') }}">
     <!-- End Layout styles -->
     <link rel="shortcut icon" href="{{asset('backend/assets/images/favicon.ico')}}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
   </head>
   <body>
     <div class="container-scroller">
@@ -54,6 +55,20 @@
       <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="modalSearch" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:40% ">
+      <div class="modal-content">
+        <div class="modal-body">
+            <div class="form-group mt-3">
+                <input type="text" name="search" id="search" class="form-control" placeholder="Search">
+                <button type="button" class="btn btn-primary btn-sm ml-2" class="btnSearch" id="btnSearch">Search</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
     <!-- plugins:js -->
     <script src="{{ asset('backend/assets/vendors/js/vendor.bundle.base.js') }}"></script>
     <script src="{{asset('backend/assets/vendors/js/vendor.bundle.addons.js')  }}"></script>
@@ -73,6 +88,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
          $.ajaxSetup({
         headers: {
@@ -92,7 +109,7 @@
                 style: {
                     background: "linear-gradient(to right, #00b09b, #96c93d)",
                 },
-                onClick: function(){} 
+                onClick: function(){}
                 }).showToast();
         }
     </script>

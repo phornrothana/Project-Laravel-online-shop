@@ -16,12 +16,44 @@ class BrandController extends Controller
         return view('backend.Brand.brand',compact('category'));
 
     }
-    public function list()
+    public function list(Request $request)
     {
-        $brand = Brand::orderBy("id","ASC")->with('category')->get();
+        //pagination form
+        $limit = 5;
+        $page  = $request->page;  //2
+
+        $offset = ($page - 1) * $limit;
+
+        if(!empty($request->search)){
+            $brands = Brand::where('name','like','%'.$request->search.'%')
+                            ->orderBy("id","DESC")->with('category')
+                            ->limit($limit)
+                            ->offset($offset)
+                            ->get();
+            $totalRecord = Brand::where('name','like','%'.$request->search.'%')->count();
+        }else{
+            $brands = Brand::orderBy("id","DESC")->with('category')
+                            ->limit($limit)
+                            ->offset($offset)
+                            ->get();
+            $totalRecord = Brand::count();
+        }
+
+
+
+        //totalRecord
+
+
+        $totalPage   = ceil($totalRecord / 5);  // 2.1 => 3
+
         return response([
-            'status' =>200,
-            'brands' =>$brand
+            'status' => 200,
+            'page' => [
+                'totalRecord' => $totalRecord,
+                'totalPage'  => $totalPage,
+                'currentPage' => $page,
+            ],
+            'brands' => $brands
         ]);
     }
     public function store(Request $request)
